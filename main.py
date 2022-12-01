@@ -248,6 +248,7 @@ Enter parameter name (ios,model,vendor,location,ip): IOS
 15.4
 """
 # ANSWER
+"""
 london_co = {
 'r1' : {
 'location': '21 New Globe Walk',
@@ -279,6 +280,50 @@ device = input(f'Все устройства: {", ".join(list(map(str,london_co.
 parametr = input(f'Введите параметр устройства ({", ".join(list(map(str,london_co[device.lower()].keys())))}): ')
 print(london_co.get(device.lower(), 'Такого устройства нет').get(parametr.lower(), 'Такого параметра нет'))
 input()
+"""
+################################################################
+
+"""
+Задание 4.3
+(Задача на основе примеров в разделе)
+В этой задаче нельзя использовать условие if.
+Скрипт должен запрашивать у пользователя:
+информацию о режиме интерфейса (access/trunk),
+пример текста запроса: 'Enter interface mode (access/trunk): '
+номере интерфейса (тип и номер, вида Gi0/3)
+пример текста запроса: 'Enter interface type and number: '
+номер VLANа (для режима trunk будет вводиться список VLANов)
+пример текста запроса: 'Enter vlan(s): '
+В зависимости от выбранного режима, на стандартный поток вывода, должна
+возвращаться соответствующая конфигурация access или trunk (шаблоны команд
+находятся в списках access_template и trunk_template).
+При этом, сначала должна идти строка interface и подставлен номер интерфейса, а
+затем соответствующий шаблон, в который подставлен номер VLANа (или список
+VLANов).
+"""
+# ANSWER
+"""
+modes = {'access': None, 'trunk': None}
+access_template = ['switchport mode access',
+'switchport access vlan %s',
+'switchport nonegotiate',
+'spanning-tree portfast',
+'spanning-tree bpduguard enable']
+trunk_template = ['switchport trunk encapsulation dot1q',
+'switchport mode trunk',
+'switchport trunk allowed vlan %s']
+
+modes['access'] = {x: None for x in access_template}
+modes['trunk'] = {x: None for x in trunk_template}
+
+interface_mode = input(f'Enter interface mode ({"/".join(list(map(str, modes.keys())))}): ')
+print(f'The "{interface_mode}" mode is selected')
+interface_type = input('Enter interface type and number: ')
+vlans = input('Enter vlan(s): ')
+config = "\n".join(list(map(str, modes.get(interface_mode, 'Mode not found').keys())))
+print(config % vlans)
+input()
+"""
 
 ################################################################
 
