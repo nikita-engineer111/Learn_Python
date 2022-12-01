@@ -327,3 +327,71 @@ input()
 
 ################################################################
 
+"""
+Задание 5.1
+1. Запросить у пользователя ввод IP-адреса в десятично-точечном формате.
+2. Определить какому классу принадлежит IP-адрес.
+3. В зависимости от класса адреса, вывести на стандартный поток вывода:
+'unicast' - если IP-адрес принадлежит классу A, B или C
+'multicast' - если IP-адрес принадлежит классу D
+'local broadcast' - если IP-адрес равен 255.255.255.255
+'unassigned' - если IP-адрес равен 0.0.0.0
+'unused' - во всех остальных случаях
+
+Задание 5.1a
+Сделать копию скрипта задания 5.1.
+Дополнить скрипт:
+Добавить проверку введенного IP-адреса.
+Адрес считается корректно заданным, если он:
+состоит из 4 чисел разделенных точкой,
+каждое число в диапазоне от 0 до 255.
+Если адрес задан неправильно, выводить сообщение:
+'Incorrect IPv4 address'
+
+Задание 5.1b
+Сделать копию скрипта задания 5.1a.
+Дополнить скрипт:
+Если адрес был введен неправильно, запросить адрес снова.
+"""
+# ANSWER
+"""
+ip_is_normal = False
+
+while not ip_is_normal:
+    ip = input('Введите IP-адрес в формате 192.168.1.1: ')
+    octets = ip.split('.')
+    correct_quantity_octets = len(octets) == 4
+    if not correct_quantity_octets:
+        print('Incorrect IPv4 address: wrong quantity octets')
+        continue
+    octets_is_digit = octets[0].isdigit() and octets[1].isdigit() and octets[2].isdigit() and octets[3].isdigit()
+    if not octets_is_digit:
+        print('Incorrect IPv4 address: octets are not digits')
+        continue
+    octets_in_correct_range = int(octets[0]) >= 0 and int(octets[0]) <= 255 and int(octets[1]) >= 0 and int(octets[1]) <= 255 and int(octets[2]) >= 0 and int(octets[2]) <= 255 and int(octets[3]) >= 0 and int(octets[3]) <= 255
+    if correct_quantity_octets and octets_is_digit and octets_in_correct_range:
+        ip_is_normal = True
+    else:
+        print('Incorrect IPv4 address: octets in wrong range')
+else:
+    if ip == '0.0.0.0':
+        print(f'IP {ip} is unassigned')
+    elif ip == '255.255.255.255':
+        print(f'IP {ip} is unassigned')
+    elif int(octets[0]) >= 1 and int(octets[0]) <= 127:
+        print(f'Class A IP {ip}')
+    elif int(octets[0]) >= 128 and int(octets[0]) <= 191:
+        print(f'Class B IP {ip}')
+    elif int(octets[0]) >= 192 and int(octets[0]) <= 223:
+        print(f'Class C IP {ip}')
+    elif int(octets[0]) >= 224 and int(octets[0]) <= 239:
+        print(f'Class D IP {ip}')
+    else:
+        print(f'IP {ip} is unused')
+
+input()
+"""
+
+################################################################
+
+
