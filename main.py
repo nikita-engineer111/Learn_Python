@@ -413,3 +413,55 @@ print(mac_cisco)
 
 ################################################################
 
+"""
+Задание 5.3
+В скрипте сделан генератор конфигурации для access-портов.
+Сделать аналогичный генератор конфигурации для портов trunk.
+В транках ситуация усложняется тем, что VLANов может быть много, и надо понимать,
+что с ними делать.
+Поэтому в соответствии каждому порту стоит список и первый (нулевой) элемент
+списка указывает как воспринимать номера VLAN, которые идут дальше:
+Задания
+148
+add - значит VLANы надо будет добавить (команда switchport trunk allowed vlan add
+10,20)
+del - значит VLANы надо удалить из списка разрешенных (команда switchport trunk
+allowed vlan remove 17)
+only - значит, что на интерфейсе должны остаться разрешенными только
+указанные VLANы (команда switchport trunk allowed vlan 11,30)
+
+Задача для портов 0/1, 0/2, 0/4:
+сгенерировать конфигурацию на основе шаблона trunk_template
+с учетом ключевых слов add, del, only
+"""
+# ANSWER
+"""
+trunk_template = ['switchport trunk encapsulation dot1q',
+'switchport mode trunk',
+'switchport trunk allowed vlan']
+fast_int = {'access':{'0/12':'10','0/14':'11','0/16':'17','0/17':'150'},
+'trunk':{'0/1':['add','10','20','40','54'],
+'0/2':['only','11','30'],
+'0/4':['del','17']} }
+
+for int in fast_int['trunk']:
+    print('interface FastEthernet' + int)
+    for command in trunk_template:
+        if command.endswith('allowed vlan'):
+            if fast_int['trunk'][int][0] == 'add':
+                fast_int['trunk'][int].remove('add')
+                command_print = ' ' + command +' add '+ ', '.join(fast_int['trunk'][int])
+                print(command_print)
+            if fast_int['trunk'][int][0] == 'only':
+                fast_int['trunk'][int].remove('only')
+                print(' %s' % command, ', '.join(fast_int['trunk'][int]))
+            if fast_int['trunk'][int][0] == 'del':
+                fast_int['trunk'][int][0] = 'remove'
+                print(' %s' % command, ' '.join(fast_int['trunk'][int]))
+
+        else:
+            print(' %s ' % command)
+"""
+
+################################################################
+
