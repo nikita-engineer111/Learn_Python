@@ -543,3 +543,37 @@ print(generate_access_config())
 
 ################################################################
 
+"""
+Задание 7.1a
+Сделать копию скрипта задания 7.1
+Изменить скрипт таким образом, чтобы функция возвращала не список команд, а
+словарь:
+ключи: имена интерфейсов, вида 'FastEthernet0/12'
+значения: список команд, который надо выполнить на этом интерфейсе
+"""
+# ANSWER
+"""
+trunk_template = ['switchport trunk encapsulation dot1q',
+'switchport mode trunk',
+'switchport trunk native vlan 999',
+'switchport trunk allowed vlan']
+
+trunk_dict =  { 'FastEthernet0/1':[10,20,30],
+'FastEthernet0/2':[11,30],
+'FastEthernet0/4':[17] }
+
+def generate_trunk_config():
+    config = {}
+    for interface in trunk_dict.keys():
+        config[interface] = []
+        for command in trunk_template:
+            if command.endswith('allowed vlan'):
+                config[interface].append('%s %s' % (command, ', '.join(str(e) for e in trunk_dict['FastEthernet0/1']) ))
+            else:
+                config[interface].append('%s ' % command)
+    return config
+print(generate_trunk_config())
+"""
+
+################################################################
+
